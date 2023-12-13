@@ -23,6 +23,7 @@ string stripLetters(string line){
 
     for(char c : line){
         int castChar = (int) c;    
+        // checks if character is a number
         if (castChar < 58 && castChar > 47){
             nums += c;
         }
