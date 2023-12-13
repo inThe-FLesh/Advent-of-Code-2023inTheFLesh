@@ -19,7 +19,11 @@ In the example above, games 1, 2, and 5 would have been possible if the bag had 
 Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games? */ 
 
 #include "day2part1.h"
+#include <regex>
+#include <stdexcept>
 #include <string>
+
+
 
 int getId(string line){
   line = line.substr(0, line.find(":"));
@@ -27,21 +31,98 @@ int getId(string line){
   return stoi(line);
 }
 
+
+
 string getGame(string line, int length){
   // add 1 to size as there is one less semi colon than there are blocks
   return line = line.substr((line.find(":") + 2), length);
 }
 
-int main(){
 
+
+string getRound(string line, int length){
+  string round;
+
+  if(line.find(";")){  
+    round = line.substr(0, line.find(";"));
+  }else{
+    round = line;
+  }
+
+  return round;
+}
+
+
+
+string endRound(string line, int length){
+  // checks if the string contains a ;
+  if (line.find(";") != string::npos){
+    return line.substr((line.find(";") + 2), length);
+  }
+
+  return "done";
+}
+
+
+
+int *getNumbers(string round){
+  string colour = round;
+  int *numArray = (int*) malloc(sizeof(int) * 3);
+
+  if (round.find(",") != string::npos){
+    colour = round.substr(0, round.find(","));
+  }
+
+  if(colour.find("red")){
+    colour = removeColour(colour);
+    numArray[0] = stoi(colour);
+  }
+  
+  else if (colour.find("green")) {
+    colour = removeColour(colour);
+    numArray[1] = stoi(colour);
+  }
+
+  else if(colour.find("blue")){
+    colour = removeColour(colour);
+    numArray[2] = stoi(colour);
+  }
+
+  // find a way to recurse through and add the numbers to the array
+
+  else{
+    throw std::invalid_argument("Colour not recognised");
+  }
+}
+
+
+string removeColour(string colour){
+  const regex pattern("[^0-9]");
+  return regex_replace(colour, pattern, "");
+}
+
+
+int main(){
   int id;
   string line;
   ifstream input("day2Input.txt");
 
   while (getline(input, line)) {
     id = getId(line);
+    string round;
+    int count = 0;
+
+    // position 0 = red, position 1 = green, position 2 = blue
+    int *colourArr = (int*) malloc(sizeof(int) * 3);
+
     string game = getGame(line, line.length());
-    cout << game << endl;
+    
+    while(line != "done"){
+      string round = getRound(line, line.length());
+      // function to get numbers from round
+      line = endRound(line, line.length());
+    }
   }
+
 }
 

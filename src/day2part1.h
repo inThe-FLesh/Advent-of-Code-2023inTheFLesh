@@ -27,3 +27,9 @@ int countSemiColon(string line);
 string getGame(string line, int size);
 
 int getId(string line);
+
+string getRound(string line, int length);
+
+string endRound(string line, int length);
+
+string removeColour(string colour);
