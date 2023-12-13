@@ -20,14 +20,10 @@ using std::find;
 using std::unordered_map;
 using std::regex;
 using std::regex_replace;
-using std::stoi;
+using std::count;
 
-int getCalibrationValue(string line, int size);
+int countSemiColon(string line);
 
-string stripLetters(string line);
+string getGame(string line, int size);
 
-string parseNumFromString(string line);
-
-class day1{};
-
-
+int getId(string line);
