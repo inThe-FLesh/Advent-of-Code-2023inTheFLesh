@@ -35,3 +35,5 @@ string endRound(string line, int length);
 string removeColour(string colour);
 
 string getNextColour(string colours, int length);
+
+int *createColourNumArray(int *numArray);
