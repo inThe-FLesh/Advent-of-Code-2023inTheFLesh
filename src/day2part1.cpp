@@ -19,7 +19,6 @@ In the example above, games 1, 2, and 5 would have been possible if the bag had 
 Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games? */ 
 
 #include "day2part1.h"
-#include <regex>
 #include <stdexcept>
 #include <string>
 
@@ -48,10 +47,9 @@ string getRound(string line, int length){
   }else{
     round = line;
   }
-
   return round;
 }
-
+ 
 
 
 string endRound(string line, int length){
@@ -68,31 +66,35 @@ string endRound(string line, int length){
 int *getNumbers(string round){
   string colour = round;
   int *numArray = (int*) malloc(sizeof(int) * 3);
-
-  if (round.find(",") != string::npos){
-    colour = round.substr(0, round.find(","));
-  }
-
-  if(colour.find("red")){
-    colour = removeColour(colour);
-    numArray[0] = stoi(colour);
-  }
+  bool finished = false;
   
-  else if (colour.find("green")) {
-    colour = removeColour(colour);
-    numArray[1] = stoi(colour);
-  }
+  // do while loop is used to ensure that the final colour block is executed as it does not contain the , 
+    if (round.find(",") != string::npos){
+      colour = round.substr(0, round.find(","));
+    }else{
+      finished = true;
+    }
 
-  else if(colour.find("blue")){
-    colour = removeColour(colour);
-    numArray[2] = stoi(colour);
-  }
+    if(colour.find("red")){
+      colour = removeColour(colour);
+      numArray[0] = stoi(colour);
+    }
+  
+    else if (colour.find("green")) {
+      colour = removeColour(colour);
+      numArray[1] = stoi(colour);
+    }
 
-  // find a way to recurse through and add the numbers to the array
+    else if(colour.find("blue")){
+      colour = removeColour(colour);
+      numArray[2] = stoi(colour);
+    }
 
-  else{
-    throw std::invalid_argument("Colour not recognised");
-  }
+    else{
+      throw std::invalid_argument("Colour not recognised");
+    }
+
+  return numArray; 
 }
 
 
@@ -100,6 +102,13 @@ string removeColour(string colour){
   const regex pattern("[^0-9]");
   return regex_replace(colour, pattern, "");
 }
+
+
+
+string getNextColour(string colours, int length){
+  return colours.substr(colours.find(","), length);
+}
+
 
 
 int main(){
@@ -113,7 +122,7 @@ int main(){
     int count = 0;
 
     // position 0 = red, position 1 = green, position 2 = blue
-    int *colourArr = (int*) malloc(sizeof(int) * 3);
+    int *colourNumArr = (int*) malloc(sizeof(int) * 3);
 
     string game = getGame(line, line.length());
     
@@ -121,8 +130,13 @@ int main(){
       string round = getRound(line, line.length());
       // function to get numbers from round
       line = endRound(line, line.length());
+      colourNumArr = getNumbers(round);
+      
+      for (int i = 0; i < sizeof(colourNumArr); i++){
+        cout << *colourNumArr[i] << endl;
+      }
     }
+    free(colourNumArr);
   }
-
 }
 
