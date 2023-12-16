@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <ostream>
 #include <queue>
 #include <regex>
@@ -17,6 +18,7 @@ using std::cout;
 using std::endl;
 using std::find;
 using std::ifstream;
+using std::numeric_limits;
 using std::queue;
 using std::regex;
 using std::regex_replace;
@@ -24,6 +26,8 @@ using std::string;
 using std::unordered_map;
 
 int countSemiColon(string line);
+
+string getGame(string line, int size);
 
 int getId(string line);
 
@@ -39,4 +43,6 @@ string getNextColour(string colours, int length);
 
 int *createColourNumArray(int *numArray);
 
-bool maxCheck(int *colourNumArr);
+int findPower(int *numArray);
+
+int powerSum(queue<int> powers);

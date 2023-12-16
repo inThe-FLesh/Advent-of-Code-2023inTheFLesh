@@ -44,11 +44,6 @@ int getId(string line) {
   return stoi(line);
 }
 
-string getGame(string line, int length) {
-  // add 1 to size as there is one less semi colon than there are blocks
-  return line = line.substr((line.find(":") + 2), length);
-}
-
 string getRound(string line, int length) {
   string round;
 
@@ -182,8 +177,6 @@ int main() {
     for (int i = 0; i < 3; i++) {
       colourNumArr[i] = 0;
     }
-
-    // string game = getGame(line, line.length());
 
     while (line != "done") {
       // position 0 = red, position 1 = green, position 2 = blue
