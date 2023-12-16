@@ -35,6 +35,7 @@ of those games? */
 
 #include "day2part1.h"
 #include <cstdlib>
+#include <queue>
 #include <stdexcept>
 #include <string>
 
@@ -52,12 +53,20 @@ string getGame(string line, int length) {
 string getRound(string line, int length) {
   string round;
 
-  if (line.find(";")) {
+  if (line.find(";") != string::npos) {
     round = line.substr(0, line.find(";"));
   } else {
     round = line;
   }
+
+  if (round.find(":") != string::npos) {
+    round = removeGame(round, length);
+  }
   return round;
+}
+
+string removeGame(string line, int length) {
+  return line.substr(line.find(":") + 2, length);
 }
 
 string endRound(string line, int length) {
@@ -116,31 +125,78 @@ string getNextColour(string colours, int length) {
   return colours.substr(colours.find(",") + 2, length);
 }
 
+bool checkGame(int *colourNumArrSum) {
+
+  if (colourNumArrSum[0] != 12) {
+    return false;
+  }
+
+  if (colourNumArrSum[1] != 13) {
+    return false;
+  }
+
+  if (colourNumArrSum[2] != 14) {
+    return false;
+  }
+
+  return true;
+}
+
+int sumIDs(queue<int> acceptedIDs) {
+  int total = 0;
+
+  return total;
+}
+
 int main() {
   int id;
+  int sum = 0;
   string line;
   ifstream input("day2Input.txt");
+  queue<int> acceptedIDs;
 
   while (getline(input, line)) {
     id = getId(line);
     string round;
     int count = 0;
 
-    // position 0 = red, position 1 = green, position 2 = blue
     int *colourNumArr = (int *)malloc(sizeof(int) * 3);
+    int *colourNumArrSum = (int *)malloc(sizeof(int) * 3);
+
+    for (int i = 0; i < 3; i++) {
+      colourNumArrSum[i] = 0;
+      colourNumArr[i] = 0;
+    }
 
     // string game = getGame(line, line.length());
 
     while (line != "done") {
+      // position 0 = red, position 1 = green, position 2 = blue
       string round = getRound(line, line.length());
+
       // function to get numbers from round
       line = endRound(line, line.length());
+
       colourNumArr = getNumbers(round, round.length());
+
       for (int i = 0; i < 3; i++) {
-        cout << colourNumArr[i] << ":";
+        colourNumArrSum[i] += colourNumArr[i];
       }
-      cout << endl;
-      free(colourNumArr);
     }
+
+    if (checkGame(colourNumArrSum)) {
+      acceptedIDs.push(id);
+    }
+
+    free(colourNumArr);
+    free(colourNumArrSum);
   }
+
+  while (!acceptedIDs.empty()) {
+    int id = acceptedIDs.front();
+    sum += id;
+    acceptedIDs.pop();
+  }
+
+  cout << sum << endl;
 }
