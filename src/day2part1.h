@@ -44,3 +44,5 @@ int *createColourNumArray(int *numArray);
 bool checkGame(int *colourNumArrSum);
 
 int sumIDs(queue<int> acceptedIDs);
+
+bool maxCheck(int *colourNumArr);

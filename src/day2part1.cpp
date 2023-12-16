@@ -35,7 +35,6 @@ of those games? */
 
 #include "day2part1.h"
 #include <cstdlib>
-#include <queue>
 #include <stdexcept>
 #include <string>
 
@@ -90,15 +89,15 @@ int *getNumbers(string round, int roundLength) {
   while (!finished) {
 
     if (colour.find("red") != string::npos) {
-      numArray[0] += std::stoi(removeColour(colour));
+      numArray[0] = std::stoi(removeColour(colour));
     }
 
     else if (colour.find("green") != string::npos) {
-      numArray[1] += std::stoi(removeColour(colour));
+      numArray[1] = std::stoi(removeColour(colour));
     }
 
     else if (colour.find("blue") != string::npos) {
-      numArray[2] += std::stoi(removeColour(colour));
+      numArray[2] = std::stoi(removeColour(colour));
     }
 
     else {
@@ -127,15 +126,15 @@ string getNextColour(string colours, int length) {
 
 bool checkGame(int *colourNumArrSum) {
 
-  if (colourNumArrSum[0] != 12) {
+  if (colourNumArrSum[0] > 12) {
     return false;
   }
 
-  if (colourNumArrSum[1] != 13) {
+  if (colourNumArrSum[1] > 13) {
     return false;
   }
 
-  if (colourNumArrSum[2] != 14) {
+  if (colourNumArrSum[2] > 14) {
     return false;
   }
 
@@ -146,6 +145,23 @@ int sumIDs(queue<int> acceptedIDs) {
   int total = 0;
 
   return total;
+}
+
+bool maxCheck(int *colourNumArr) {
+
+  if (colourNumArr[0] > 12) {
+    return false;
+  }
+
+  if (colourNumArr[1] > 13) {
+    return false;
+  }
+
+  if (colourNumArr[2] > 14) {
+    return false;
+  }
+
+  return true;
 }
 
 int main() {
@@ -159,12 +175,11 @@ int main() {
     id = getId(line);
     string round;
     int count = 0;
+    bool check = false;
 
     int *colourNumArr = (int *)malloc(sizeof(int) * 3);
-    int *colourNumArrSum = (int *)malloc(sizeof(int) * 3);
 
     for (int i = 0; i < 3; i++) {
-      colourNumArrSum[i] = 0;
       colourNumArr[i] = 0;
     }
 
@@ -179,22 +194,23 @@ int main() {
 
       colourNumArr = getNumbers(round, round.length());
 
-      for (int i = 0; i < 3; i++) {
-        colourNumArrSum[i] += colourNumArr[i];
+      check = maxCheck(colourNumArr);
+
+      if (check == false) {
+        line = "done";
       }
     }
 
-    if (checkGame(colourNumArrSum)) {
+    if (check) {
       acceptedIDs.push(id);
     }
 
     free(colourNumArr);
-    free(colourNumArrSum);
   }
 
   while (!acceptedIDs.empty()) {
-    int id = acceptedIDs.front();
-    sum += id;
+    int currentID = acceptedIDs.front();
+    sum += currentID;
     acceptedIDs.pop();
   }
 
